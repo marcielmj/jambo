@@ -18,6 +18,7 @@ const config = require('./config')
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
+mongoose.Promise = global.Promise
 mongoose.connect(config.database.uri, config.database.options)
 
 /**

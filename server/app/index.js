@@ -7,9 +7,6 @@ const path = require('path')
 const app = express()
 const routes = require('./routes')
 
-mongoose.Promise = global.Promise
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, authSource: 'admin' })
-
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
