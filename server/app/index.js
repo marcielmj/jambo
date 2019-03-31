@@ -26,5 +26,8 @@ app.use('/api', jwt, routes)
 app.use('/auth', auth.routes)
 
 app.use(auth.unauthorizedHandler)
+app.use((req, res) => {
+  return res.status(404)
+})
 
 module.exports = app

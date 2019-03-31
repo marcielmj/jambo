@@ -1,11 +1,9 @@
-'use strict'
-
 const express = require('express')
-const router = express.Router()
+const routes = express.Router()
 
 const Post = require('../models').Post
 
-router.get('/', (req, res) => {
+routes.get('/', (req, res) => {
   Post.find({})
     .sort('-createdAt')
     .exec((err, posts) => {
@@ -17,8 +15,8 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
-  const post = new Post({ ...req.body })
+routes.post('/', (req, res) => {
+  const post = new Post({ userId: req.user.id, ...req.body })
 
   post.save((err, post) => {
     if (err) {
@@ -29,4 +27,4 @@ router.post('/', (req, res) => {
   })
 })
 
-module.exports = router
+module.exports = routes
