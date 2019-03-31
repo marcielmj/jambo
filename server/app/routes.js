@@ -1,8 +1,10 @@
+'use strict'
+
 const express = require('express')
-const router = express.Router()
+const routes = express.Router()
 
-const posts = require('./controllers/posts')
+const controllers = require('./controllers')
 
-router.use('/posts', posts)
+routes.use('/posts', controllers.posts)
 
-module.exports = router
+module.exports = routes

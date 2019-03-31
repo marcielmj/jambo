@@ -1,5 +1,6 @@
-const database = require('./database')
+'use strict'
 
-module.exports = {
-  database
-}
+const database = require('./database')
+const jwt = require('./jwt')
+
+module.exports = { database, jwt }
