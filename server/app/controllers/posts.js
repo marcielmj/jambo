@@ -1,30 +1,30 @@
 const express = require('express')
-const router = express.Router()
+const routes = express.Router()
 
-const Post = require('../models/post')
+const Post = require('../models').Post
 
-router.get('/', (request, response) => {
-  const posts = Post.find({})
+routes.get('/', (req, res) => {
+  Post.find({})
     .sort('-createdAt')
-    .exec((error, data) => {
-      if (error) {
-        return response.status(400).json(error)
+    .exec((err, posts) => {
+      if (err) {
+        return res.status(400).json(err)
       }
 
-      return response.json(data)
+      res.json(posts)
     })
 })
 
-router.post('/', (request, response) => {
-  const post = new Post({ ...request.body })
+routes.post('/', (req, res) => {
+  const post = new Post({ userId: req.user.id, ...req.body })
 
-  post.save((error, result) => {
-    if (error) {
-      return response.status(400).json(error)
+  post.save((err, post) => {
+    if (err) {
+      return res.status(400).json(err)
     }
 
-    return response.json(result)
+    res.json(post)
   })
 })
 
-module.exports = router
+module.exports = routes
