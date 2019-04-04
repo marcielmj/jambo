@@ -9,9 +9,10 @@ const postSchema = new mongoose.Schema({
     maxlength: 140
   },
 
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User'
   },
 
   createdAt: {

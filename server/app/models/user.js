@@ -5,7 +5,6 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
   nickname: {
     type: String,
-    required: true,
     maxlength: 32
   },
 

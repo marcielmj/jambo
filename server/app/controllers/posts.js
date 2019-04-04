@@ -16,14 +16,27 @@ routes.get('/', (req, res) => {
 })
 
 routes.post('/', (req, res) => {
-  const post = new Post({ userId: req.user.id, ...req.body })
+  const user = {
+    _id: req.user.id,
+    username: req.user.username
+  }
+
+  const post = new Post({ user: user._id, ...req.body })
 
   post.save((err, post) => {
     if (err) {
       return res.status(400).json(err)
     }
 
-    res.json(post)
+    Post.findById(post._id)
+      .populate('user', '_id username')
+      .exec((err, post) => {
+        if (err) {
+          return res.status(400).json(err)
+        }
+
+      res.json(post)
+    })
   })
 })
 
