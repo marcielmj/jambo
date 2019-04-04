@@ -22,6 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const jwt = expressJwt({ secret: config.jwt.secret })
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next()
+})
+
 app.use('/api', jwt, routes)
 app.use('/auth', auth.routes)
 
