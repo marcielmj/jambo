@@ -5,6 +5,7 @@ module.exports = {
   options: {
     useNewUrlParser: true,
     autoReconnect: true,
-    authSource: 'admin'
+    authSource: 'admin',
+    useCreateIndex: true
   }
 }

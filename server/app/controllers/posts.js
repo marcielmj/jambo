@@ -1,7 +1,7 @@
 const express = require('express')
 const routes = express.Router()
 
-const Post = require('../models').Post
+const Post = require('../models/post')
 
 routes.get('/', (req, res) => {
   Post.find({})

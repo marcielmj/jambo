@@ -2,38 +2,25 @@
 
 const cookieParser = require('cookie-parser')
 const express = require('express')
-const expressJwt = require('express-jwt')
 const logger = require('morgan')
 const path = require('path')
 
-const auth = require('./auth')
-const config = require('../config')
+const cors = require('./middlewares/cors')
 const routes = require('./routes')
+const unauthorized = require('./middlewares/unauthorized')
+const notFound = require('./middlewares/not-found')
 
 const app = express()
 
 app.use(logger('dev'))
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-const jwt = expressJwt({ secret: config.jwt.secret })
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next()
-})
-
-app.use('/api', jwt, routes)
-app.use('/auth', auth.routes)
-
-app.use(auth.unauthorizedHandler)
-app.use((req, res) => {
-  return res.status(404)
-})
+app.use(cors)
+app.use('/', routes)
+app.use(unauthorized)
+app.use(notFound)
 
 module.exports = app

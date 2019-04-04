@@ -3,13 +3,10 @@ const jwt = require('jsonwebtoken')
 const routes = express.Router()
 
 const config = require('../../config')
-const unauthorizedHandler = require('./unauthorized-handler')
-
-const User = require('../models').User
+const User = require('../models/user')
 
 routes.post('/login', (req, res) => {
   const { username, password } = req.body
-
   User.findOne({ username: username, password: password }).exec((_err, user) => {
     if (user) {
       const payload = {
@@ -35,15 +32,19 @@ routes.post('/signup', (req, res) => {
       return res.status(400).json(err)
     }
 
+    const payload = {
+      id: user._id,
+      username: user.username
+    }
+
+    const token = jwt.sign(payload, config.jwt.secret)
+
     res.json({
+      nickname: user.nickname,
       username: user.username,
-      createdAt: user.createdAt
+      token: token
     })
   })
 })
 
-routes.get('/logout', (req, res) => {
-  // TODO
-})
-
-module.exports = { routes, unauthorizedHandler }
+module.exports = routes
