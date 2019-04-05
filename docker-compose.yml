@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:4.0-xenial
+    container_name: jambo-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: jambo
+      MONGO_INITDB_ROOT_PASSWORD: jambo
+
+  server:
+    build: ./server
+    image: marcielmj/jambo-server
+    container_name: jambo-server
+    restart: always
+    command: sh -c "yarn install --frozen-lockfile --production && yarn start"
+    environment:
+      DATABASE_URL: mongodb://jambo:jambo@mongo:27017/jambo
+      PORT: 5000
+      SECRET_KEY: U8XBljfBNZANY1p1
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  client:
+    build: ./client
+    image: marcielmj/jambo-client
+    container_name: jambo-client
+    restart: always
+    command: sh -c "yarn install --frozen-lockfile --production && yarn start"
+    volumes:
+      - ./client:/usr/src/app
+      - ./client/.node_modules:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+networks:
+  default:
+    name: jambo-network
